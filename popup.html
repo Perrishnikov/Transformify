@@ -1,17 +1,20 @@
 <!-- 
 * This is the menu from clicking on the icon 
 * Inspect the popup to see Console.
-* http://images.salsify.com/image/upload/s--qT0Rpe-g--/hc4jqgdybrvlb5hfmo5a 
 -->
 <html>
 
 <style>
+  body {
+    margin-bottom: 0;
+  }
+
   #container {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-
     margin: 8px;
+    margin-bottom: 0;
     padding-left: 8px;
     padding-right: 8px;
     line-height: 1.2;
@@ -23,14 +26,13 @@
   .group {
     display: flex;
     margin-top: 12px;
-    display: flex;
     align-items: center;
-    flex-grow: 1;
-    position: relative;
+    width: 100%;
+    justify-content: space-between;
   }
 
   .label {
-    width: 80px;
+    width: 100px;
     padding-right: 8px;
   }
 
@@ -60,14 +62,11 @@
   }
 
   button {
-    /* margin-left: 16px; */
+    width: 95px;
     margin-top: 16px;
-    margin-bottom: 16px;
     cursor: pointer;
     border-radius: 4px;
     padding: 8px;
-    padding-left: 12px;
-    padding-right: 12px;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .2);
   }
 
@@ -79,9 +78,17 @@
     background-color: #4EC0DF;
     border-color: #4EC0DF;
     color: #fff;
-    width: 100px;
-    margin-left: 16px;
+  }
 
+  button.primary:disabled {
+    background-color: #C9D0D5;
+    border-color: #C9D0D5;
+    cursor: not-allowed;
+  }
+
+  button.primary:disabled:hover {
+    background-color: #C9D0D5;
+    border-color: #C9D0D5;
   }
 
   button.primary:hover {
@@ -98,8 +105,6 @@
     background-color: #28a745;
     border-color: #28a745;
     color: #fff;
-    width: 100px;
-    margin-left: 16px;
   }
 </style>
 
@@ -144,18 +149,18 @@
     <div class="group">
       <label class="label" for="output-select">Output</label>
       <select name="output" id="output-select">
-        <!-- <option value="2">2</option> -->
+        <option value=""></option>
       </select>
     </div>
 
     <div class="group">
-      <button class="reset" id="reset">RESET</button>
 
-      <button class="primary" id="primary">TRANSFORM</button>
+      <button class="primary" id="imageButt">COPY IMAGE</button>
 
-      <!-- <button class="secondary" id="secondary">OPEN</button> -->
+      <button class="primary" id="linkButt">COPY LINK</button>
+
+      <!-- <button class="reset" id="reset">RESET</button> -->
     </div>
-
   </div>
 
 </body>

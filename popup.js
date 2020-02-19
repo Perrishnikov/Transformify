@@ -1,5 +1,7 @@
+//TODO Image download or link
+
 const options = {
-  output: ['jpg', 'png', 'pdf'],
+  output: ['png', 'jpg', 'pdf'],
   cs: ['srgb'],
   c: ['pad'],
 };
@@ -20,7 +22,8 @@ const handle = {
   dn: document.querySelector('#dpi'),
   c: document.querySelector('#crop-select'),
   cs: document.querySelector('#cs-select'),
-  primary: document.querySelector('#primary'),
+  image: document.querySelector('#imageButt'),
+  link: document.querySelector('#linkButt'),
   reset: document.querySelector('#reset'),
   out: document.querySelector('#output-select'),
   message: document.querySelector('#message')
@@ -73,16 +76,16 @@ const rebuildUrl = obj => {
 
 
 /**
- * Fires 
+ * Wrtite Text to Clipboard
  * @param {string} newClip 
  */
-const updateClipboard = newClip => {
+const addTextClipboard = newClip => {
   // console.log('newclip -- ', newClip);
   navigator.clipboard.writeText(newClip).then(() => {
     /* clipboard successfully set */
     /** Change name of button for user feedback  */
-    handle.primary.textContent = 'COPIED!';
-    handle.primary.classList = 'copied';
+    handle.link.textContent = 'COPIED!';
+    handle.link.classList = 'copied';
 
     /** Close popup to help Users get on with their lives */
     setTimeout(() => {
@@ -98,10 +101,51 @@ const updateClipboard = newClip => {
 };
 
 
+/**
+ * Wrtite Image to Clipboard
+ * https://web.dev/image-support-for-async-clipboard/
+ * @param {string} newClip 
+ */
+const addImageClipboard = newClip => {
+  try {
+    // const imgURL = newClip;
+    fetch(newClip).then(response => {
+
+      return response.blob();
+    }).then(blob => {
+
+      navigator.clipboard.write([
+        new ClipboardItem({
+          [blob.type]: blob
+        })
+      ]).then(() => {
+        /* clipboard successfully set */
+        /** Change name of button for user feedback  */
+        handle.image.textContent = 'COPIED!';
+        handle.image.classList = 'copied';
+
+        /** Close popup to help Users get on with their lives */
+        setTimeout(() => {
+          window.close();
+        }, 2000);
+      }, () => {
+        /* clipboard write failed */
+        alert('Image could not be copied! See Perry');
+
+      });
+    });
+
+  } catch (e) {
+    /* clipboard write failed */
+    alert('Image could not be fetched! See Perry');
+  }
+};
+
+
 /** 
  * Sets the event listener for primary button
 */
-handle.primary.onclick = function () {
+handle.image.onclick = function () {
 
   chrome.tabs.query({ 'active': true }, (tabs) => {
     //http://images.salsify.com/image/upload/s--qT0Rpe-g--/hc4jqgdybrvlb5hfmo5a
@@ -110,12 +154,16 @@ handle.primary.onclick = function () {
     const goodUrl = rebuildUrl(brokenUrl);
 
 
-    //https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Interact_with_the_clipboard
+    /** 
+     * Get permission...
+     * https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Interact_with_the_clipboard
+    */
     navigator.permissions.query({ name: 'clipboard-write' }).then(result => {
       if (result.state == 'granted' ||
         result.state == 'prompt') {
+
         /* write to the clipboard now */
-        updateClipboard(goodUrl);
+        addImageClipboard(goodUrl);
       } else {
         alert('Permissions issue. See Perry');
       }
@@ -133,13 +181,58 @@ handle.primary.onclick = function () {
 
 
 /** 
+ * Sets the event listener for primary button
+*/
+handle.link.onclick = function () {
+
+  chrome.tabs.query({ 'active': true }, (tabs) => {
+    //http://images.salsify.com/image/upload/s--qT0Rpe-g--/hc4jqgdybrvlb5hfmo5a
+    const url = tabs[0].url;
+    const brokenUrl = breakUrl(url);
+    const goodUrl = rebuildUrl(brokenUrl);
+
+
+    /** 
+     * Get permission...
+     * https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Interact_with_the_clipboard
+    */
+    navigator.permissions.query({ name: 'clipboard-write' }).then(result => {
+      if (result.state == 'granted' ||
+        result.state == 'prompt') {
+
+        /* write to the clipboard now */
+        addTextClipboard(goodUrl);
+
+      } else {
+        alert('Permissions issue. See Perry');
+      }
+    });
+  });
+};
+
+/** 
  * Sets event listener for reset button
 */
-handle.reset.onclick = () => {
-  console.log('reset');
-  initialize();
-};
+// handle.reset.onclick = () => {
+//   console.log('reset');
+//   initialize();
+// };
 
 
 /** Run on popup opening */
 initialize();
+
+handle.out.addEventListener('change', (e) => {
+  console.log(e.target.value);
+  const i = handle.image;
+  console.dir(i);
+  if (e.target.value === 'png') {
+
+    handle.image.disabled = false;
+    console.log('set disable to false');
+  }
+  else {
+    console.log('set disable to true');
+    handle.image.disabled = true;
+  }
+})
