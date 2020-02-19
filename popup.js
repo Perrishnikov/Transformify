@@ -115,6 +115,7 @@ const addImageClipboard = newClip => {
     }).then(blob => {
 
       navigator.clipboard.write([
+        // eslint-disable-next-line no-undef
         new ClipboardItem({
           [blob.type]: blob
         })
@@ -235,4 +236,4 @@ handle.out.addEventListener('change', (e) => {
     console.log('set disable to true');
     handle.image.disabled = true;
   }
-})
+});
