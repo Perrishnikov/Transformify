@@ -1,0 +1,167 @@
+<!-- 
+* This is the menu from clicking on the icon 
+* Inspect the popup to see Console.
+* http://images.salsify.com/image/upload/s--qT0Rpe-g--/hc4jqgdybrvlb5hfmo5a 
+-->
+<html>
+
+<style>
+  #container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    margin: 8px;
+    padding-left: 8px;
+    padding-right: 8px;
+    line-height: 1.2;
+    font-size: 13px;
+    font-family: proxima-nova, sans-serif;
+    color: #333;
+  }
+
+  .group {
+    display: flex;
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    position: relative;
+  }
+
+  .label {
+    width: 80px;
+    padding-right: 8px;
+  }
+
+  select {
+    width: 100px;
+    height: 22px;
+    outline: 0;
+  }
+
+  input {
+    width: 100px;
+    font-size: 13px;
+    line-height: 16px;
+    color: #303030;
+    border: 1px solid #C9D0D5;
+    border-radius: 4px;
+    padding-left: 4px;
+    background-color: rgb(248, 248, 248);
+  }
+
+  input:hover {
+    border-color: #58666E;
+  }
+
+  input:focus {
+    outline: 0;
+  }
+
+  button {
+    /* margin-left: 16px; */
+    margin-top: 16px;
+    margin-bottom: 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 8px;
+    padding-left: 12px;
+    padding-right: 12px;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .2);
+  }
+
+  button:focus {
+    outline: 0;
+  }
+
+  button.primary {
+    background-color: #4EC0DF;
+    border-color: #4EC0DF;
+    color: #fff;
+    width: 100px;
+    margin-left: 16px;
+
+  }
+
+  button.primary:hover {
+    background-color: #0892c0;
+    border-color: #0892c0;
+  }
+
+  button.reset:hover {
+    background-color: gainsboro;
+    border-color: gainsboro;
+  }
+
+  button.copied {
+    background-color: #28a745;
+    border-color: #28a745;
+    color: #fff;
+    width: 100px;
+    margin-left: 16px;
+  }
+</style>
+
+<body>
+
+  <div id="container">
+    <h3>Transformify</h3>
+    <div class="group">
+      <label class="label">Width</label>
+      <input type="number" id="width" name="width" step=50 value="">
+    </div>
+    <div class="group">
+      <label class="label">Height</label>
+      <input type="number" id="height" name="height" size="10" step=50 value="">
+    </div>
+    <div class="group">
+      <label class="label" for="crop-select">Crop Mode</label>
+      <select name="crop" id="crop-select">
+        <option value=""></option>
+      </select>
+    </div>
+
+    <div class="group">
+      <label class="label">DPI</label>
+      <input type="number" id="dpi" name="dpi" value="">
+    </div>
+
+    <div class="group">
+      <label class="label" for="crop-select">Color Space</label>
+      <select name="cs" id="cs-select">
+        <option value=""></option>
+      </select>
+    </div>
+
+    <!-- <div class="group">
+        <label class="label" for="pages-select">Pages</label>
+        <select name="pages" id="pages-select">
+          <option value=""></option>
+        </select>
+      </div> -->
+
+    <div class="group">
+      <label class="label" for="output-select">Output</label>
+      <select name="output" id="output-select">
+        <!-- <option value="2">2</option> -->
+      </select>
+    </div>
+
+    <div class="group">
+      <button class="reset" id="reset">RESET</button>
+
+      <button class="primary" id="primary">TRANSFORM</button>
+
+      <!-- <button class="secondary" id="secondary">OPEN</button> -->
+    </div>
+
+  </div>
+
+</body>
+
+
+
+<script src="./popup.js"></script>
+
+</html>
