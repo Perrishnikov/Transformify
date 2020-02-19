@@ -31,6 +31,19 @@
     justify-content: space-between;
   }
 
+  .title {
+    font-size: 18px;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    color: initial;
+  }
+
+  .title:hover{
+    color: blue;
+  }
+
   .label {
     width: 100px;
     padding-right: 8px;
@@ -111,7 +124,9 @@
 <body>
 
   <div id="container">
-    <h3>Transformify</h3>
+    <div class="group">
+      <a class="title" href="https://github.com/Perrishnikov/Transformify" target="_blank">Transformify</a>
+    </div>
     <div class="group">
       <label class="label">Width</label>
       <input type="number" id="width" name="width" step=50 value="">
