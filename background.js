@@ -2,10 +2,8 @@
 * This sets the rules for when the popup activates.
 
 */
-console.log('The color is blue.');
 
 chrome.runtime.onInstalled.addListener(function () {
-  console.log('onInstalled');
   return;
   // chrome.storage.sync.set({ color: '#3aa757' }, function () {
   //   console.log('The color is green.');
@@ -13,7 +11,6 @@ chrome.runtime.onInstalled.addListener(function () {
 });
 
 chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
-  console.log(`declarativeContent`);
   // console.log(chrome.tabs);
 
   chrome.declarativeContent.onPageChanged.addRules([
@@ -28,7 +25,6 @@ chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
       ]
     }
   ], function () {
-    console.log('callback');
     // chrome.tabs.query({ 'active': true }, function (tab) {
     //   console.log(tab);
     //   const url = tab.url;
