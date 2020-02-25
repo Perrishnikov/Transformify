@@ -75,6 +75,19 @@ const transformify = targetId => {
     const brokenUrl = breakApartUrl(tabs[0].url);
     const rebuiltUrl = rebuildUrl(brokenUrl);
 
+    /** Debuggin */
+    console.log(tabs[0]);
+
+    chrome.windows.getCurrent({ populate: true }, window => {
+      console.log(window);
+    });
+
+    chrome.windows.getLastFocused({ populate: true }, window => {
+      console.log(window);
+    });
+
+    /** end  */
+
     getPermission().then(() => {
 
       if (targetId === handle.link.id) {
@@ -139,9 +152,9 @@ function addTextClipboard(newClip) {
       handle.link.classList = 'copied';
 
       /** Close popup to help Users get on with their lives; window is popup */
-      setTimeout(() => {
-        window.close();
-      }, 2000);
+      // setTimeout(() => {
+      //   window.close();
+      // }, 2000);
 
     })
     .catch(err => {
@@ -181,9 +194,9 @@ const addImageClipboard = newClip => {
           handle.image.classList = 'copied';
 
           /** Close popup to help Users get on with their lives */
-          setTimeout(() => {
-            window.close();
-          }, 2000);
+          // setTimeout(() => {
+          //   window.close();
+          // }, 2000);
 
         })
         .catch(err => {
