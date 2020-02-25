@@ -72,21 +72,22 @@ const initialize = () => {
 const transformify = targetId => {
 
   chrome.tabs.query({ 'active': true }, tabs => {
-    const brokenUrl = breakApartUrl(tabs[0].url);
+    console.log(tabs);
+  });
+  // const brokenUrl = breakApartUrl(tabs[0].url);
+  // const rebuiltUrl = rebuildUrl(brokenUrl);
+
+  /** Debuggin */
+  // console.log(tabs[0]);
+
+  chrome.windows.getCurrent({ populate: true }, window => {
+    console.log(window);
+
+    const activeTab = [...window.tabs].find(tab => tab.active == true);
+
+    const brokenUrl = breakApartUrl(activeTab.url);
     const rebuiltUrl = rebuildUrl(brokenUrl);
-
-    /** Debuggin */
-    console.log(tabs[0]);
-
-    chrome.windows.getCurrent({ populate: true }, window => {
-      console.log(window);
-    });
-
-    chrome.windows.getLastFocused({ populate: true }, window => {
-      console.log(window);
-    });
-
-    /** end  */
+    console.log(activeTab);
 
     getPermission().then(() => {
 
@@ -100,6 +101,25 @@ const transformify = targetId => {
     });
 
   });
+
+  chrome.windows.getLastFocused({ populate: true }, window => {
+    // console.log(window);
+  });
+
+  /** end  */
+
+  // getPermission().then(() => {
+
+  //   if (targetId === handle.link.id) {
+  //     addTextClipboard(rebuiltUrl);
+  //   }
+  //   else if (targetId === handle.image.id) {
+  //     addImageClipboard(rebuiltUrl);
+  //   }
+
+  // });
+
+  // });
 };
 
 
