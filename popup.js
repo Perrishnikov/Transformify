@@ -1,4 +1,3 @@
-//TODO Image download or link
 
 const options = {
   output: ['png', 'jpg', 'pdf'],
@@ -28,6 +27,8 @@ const handle = {
   out: document.querySelector('#output-select'),
   message: document.querySelector('#message'),
   debug: document.querySelector('#debug'),
+  // button: document.querySelectorAll('button'),
+  body: document.querySelector('body')
   // pg: document.querySelector('#pages-select'),
   // secondary: document.querySelector('#secondary')
 };
@@ -37,6 +38,20 @@ const handle = {
  * Set initial values and popululate select options in DOM
  */
 const initialize = () => {
+
+  window.removeEventListener('click', this);
+
+  window.addEventListener('click', e => {
+    let targetId = e.target.id;
+
+    if (targetId === handle.link.id) {
+      transformify(handle.link.id);
+    } else if (targetId === handle.image.id) {
+      transformify(handle.image.id);
+    }
+  });
+
+
   handle.w.value = base.w;
   handle.h.value = base.h;
   handle.dn.value = base.dn;
@@ -49,7 +64,95 @@ const initialize = () => {
   handle.c.innerHTML = options.c.map(option => {
     return `<option ${option === base.c ? 'selected' : ''} value="${option}">${option}</option>`;
   });
+
+
+  document.addEventListener('paste', event => {
+    event.preventDefault();
+    navigator.clipboard.readText().then(text => {
+      console.log('Pasted text: ', text);
+    });
+  });
+
 };
+
+
+/**
+ * Do the work here
+ * @param {*} tagetId 
+ */
+const transformify = targetId => {
+
+
+  chrome.tabs.query({ 'active': true }, tabs => {
+    const brokenUrl = breakApartUrl(tabs[0].url);
+    const rebuiltUrl = rebuildUrl(brokenUrl);
+    const tabId = tabs[0].id;
+
+
+
+    getPermission().then(stuff => {
+
+      console.log(stuff);
+      addTextClipboard(rebuiltUrl);
+    })
+
+
+    /** 
+     * #2
+     * add listener to caputure completed https request.... */
+    // {
+    // eslint-disable-next-line no-shadow
+    //   chrome.tabs.onUpdated.addListener((tabId, changeInfo, newTab) => {
+
+    //     console.log('update');
+    //     if (changeInfo.status === 'complete') {
+
+    //       /** Now we're in https. Need to query the new https tab and do the work. */
+    //       // chrome.tabs.query({ 'active': true }, (httpsTab) => {
+    //       console.log('now on https...');
+
+    //       // console.log('awaiting...');
+    //       getPermission().then(permission => {
+
+    //         if (permission) {
+
+
+    //           if (targetId === handle.link.id) {
+
+    //             chrome.windows.getCurrent(null, (getInfo) => {
+
+
+    //               chrome.windows.update(getInfo.id, { focused: true }, () => {
+    //                 console.log('callback');
+
+    //                 addTextClipboard(rebuiltUrl);
+    //               });
+    //             });
+
+    //           }
+    //           else if (targetId === handle.image.id) {
+    //             null;
+
+    //           }
+    //         }
+    //       });
+
+    //     }
+    //   });
+
+
+    //   /** 
+    //    * #1
+    //    * Request the https version of url.
+    //    * It is async; we cant get new url in callback;
+    //    * Need to use the 'onUpdated' listener above
+    //    */
+    //   chrome.tabs.update(tabId, { url: rebuiltUrl }, () => { console.log('requesting https...'); });
+    // }
+
+
+  });
+}
 
 
 /**
@@ -84,52 +187,35 @@ const rebuildUrl = obj => {
 };
 
 
-const getPermission = () => {
-  /** 
-   * Get permission...
-   * https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Interact_with_the_clipboard
-  */
-  navigator.permissions.query({ name: 'clipboard-write' })
-    .then(result => {
-      console.log('result: ', result.state);
-      if (result.state == 'granted' ||
-        result.state == 'prompt') {
-
-        /* write to the clipboard now */
-        //! addTextClipboard(goodUrl);
-
-      } else {
-        alert('Permissions issue. See Perry');
-      }
-    });
-
-};
-
 
 /**
  * Wrtite Text to Clipboard
  * @param {string} newClip 
  */
-const addTextClipboard = newClip => {
-  // console.log('newclip -- ', newClip);
-  navigator.clipboard.writeText(newClip).then(() => {
-    /* clipboard successfully set */
-    /** Change name of button for user feedback  */
-    handle.link.textContent = 'COPIED!';
-    handle.link.classList = 'copied';
+function addTextClipboard(newClip) {
+  console.log('newclip -- ', newClip);
 
-    /** Close popup to help Users get on with their lives; window is popup */
-    setTimeout(() => {
-      window.close();
-    }, 2000);
+  navigator.clipboard.writeText(newClip)
+    .then(() => {
+      /* clipboard successfully set */
+
+      /** Change name of button for user feedback  */
+      handle.link.textContent = 'COPIED!';
+      handle.link.classList = 'copied';
+
+      /** Close popup to help Users get on with their lives; window is popup */
+      // setTimeout(() => {
+      //   window.close();
+      // }, 2000);
 
 
-  }, () => {
-    /* clipboard write failed */
-    alert('Text could not be copied! See Perry');
+    })
+    .catch(err => {
+      // This can happen if the user denies clipboard permissions:
+      console.error('Could not copy text: ', err);
+    });
 
-  });
-};
+}
 
 
 /**
@@ -177,79 +263,84 @@ const addImageClipboard = newClip => {
 /** 
  * Sets the event listener for primary button
 */
-handle.image.onclick = function () {
+// handle.image.onclick = function () {
 
-  chrome.tabs.query({ 'active': true }, (tabs) => {
-    //http://images.salsify.com/image/upload/s--qT0Rpe-g--/hc4jqgdybrvlb5hfmo5a
-    const url = tabs[0].url;
-    const brokenUrl = breakUrl(url);
-    const goodUrl = rebuildUrl(brokenUrl);
+//   chrome.tabs.query({ 'active': true }, (tabs) => {
+//     //http://images.salsify.com/image/upload/s--qT0Rpe-g--/hc4jqgdybrvlb5hfmo5a
+//     const url = tabs[0].url;
+//     const brokenUrl = breakApartUrl(url);
+//     const goodUrl = rebuildUrl(brokenUrl);
 
 
-    /** 
-     * Get permission...
-     * https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Interact_with_the_clipboard
-    */
-    navigator.permissions.query({ name: 'clipboard-write' }).then(result => {
-      if (result.state == 'granted' ||
-        result.state == 'prompt') {
+//     /** 
+//      * Get permission...
+//      * https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Interact_with_the_clipboard
+//     */
+//     navigator.permissions.query({ name: 'clipboard-write' }).then(result => {
+//       if (result.state == 'granted' ||
+//         result.state == 'prompt') {
 
-        /* write to the clipboard now */
-        addImageClipboard(goodUrl);
-      } else {
-        alert('Permissions issue. See Perry');
-      }
-    });
+//         /* write to the clipboard now */
+//         addImageClipboard(goodUrl);
+//       } else {
+//         alert('Permissions issue. See Perry');
+//       }
+//     });
 
-    /** Save for later */
-    // chrome.windows.create({
-    //   // url: chrome.extension.getURL('index.html')
-    //   url: goodUrl,
-    //   width: 1000,
-    //   height: 1000,
-    // });
-  });
-};
+//     /** Save for later */
+//     // chrome.windows.create({
+//     //   // url: chrome.extension.getURL('index.html')
+//     //   url: goodUrl,
+//     //   width: 1000,
+//     //   height: 1000,
+//     // });
+//   });
+// };
 
 
 /** 
- * Sets the event listener for primary button
-*/
-handle.link.onclick = () => {
+   * Get permission...
+   * https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Interact_with_the_clipboard
+  */
+function getPermission() {
 
-  chrome.tabs.query({ 'active': true }, tabs => {
-    const brokenUrl = breakApartUrl(tabs[0].url);
-    const rebuiltUrl = rebuildUrl(brokenUrl);
-    const tabId = tabs[0].id;
+  return new Promise((resolve, reject) => {
+    navigator.permissions.query({ name: 'clipboard-write' })
+      .then(result => {
+        console.log('Requesting WRITE permission from Clipboard API: ', result.state);
 
+        if (result.state == 'granted' ||
+          result.state == 'prompt') {
 
-    /** add listener to caputure completed https request.... */
-    // eslint-disable-next-line no-shadow
-    chrome.tabs.onUpdated.addListener((tabId, changeInfo, newTab) => {
+          return result.state;
 
-      if (changeInfo.status === 'complete') {
-        // alert('job\'s done');
-        /** Now we're in https. Need to query the new https tab and do the work. */
-        chrome.tabs.query({ 'active': true }, httpsTab => {
-          console.log('now on https... Requesting permission from Clipboard API....');
-      
-          //! do the promise here
-          const permission = getPermission();
-          
-        });
-      }
-    });
+        } else {
 
+          alert('Permissions issue - rejected WRITE. See Perry');
+          return reject(null);
+        }
+      })
+      .then(resolvedWrite => {
 
-    /** 
-     * Request the https version of url.
-     * It is async; we cant get new url in callback;
-     * Need to use the 'onUpdated' listener above
-     */
-    chrome.tabs.update(tabId, { url: rebuiltUrl }, () => {console.log('requesting https...');});
+        navigator.permissions.query({ name: 'clipboard-read' })
+          .then(result => {
+            console.log('Requesting READ permission from Clipboard API: ', result.state);
 
+            if (result.state == 'granted' ||
+              result.state == 'prompt') {
+
+              return resolve({ write: resolvedWrite, read: result.state });
+
+            } else {
+
+              alert('Permissions issue - rejected READ. See Perry');
+              return reject(null);
+            }
+          });
+      });
   });
-};
+
+}
 
 
 
