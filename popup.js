@@ -71,23 +71,14 @@ const initialize = () => {
  */
 const transformify = targetId => {
 
-  chrome.tabs.query({ 'active': true }, tabs => {
-    console.log(tabs);
-  });
-  // const brokenUrl = breakApartUrl(tabs[0].url);
-  // const rebuiltUrl = rebuildUrl(brokenUrl);
-
-  /** Debuggin */
-  // console.log(tabs[0]);
-
+  //Get current window...
   chrome.windows.getCurrent({ populate: true }, window => {
-    console.log(window);
 
+    //Get active tab
     const activeTab = [...window.tabs].find(tab => tab.active == true);
 
     const brokenUrl = breakApartUrl(activeTab.url);
     const rebuiltUrl = rebuildUrl(brokenUrl);
-    console.log(activeTab);
 
     getPermission().then(() => {
 
@@ -101,25 +92,6 @@ const transformify = targetId => {
     });
 
   });
-
-  chrome.windows.getLastFocused({ populate: true }, window => {
-    // console.log(window);
-  });
-
-  /** end  */
-
-  // getPermission().then(() => {
-
-  //   if (targetId === handle.link.id) {
-  //     addTextClipboard(rebuiltUrl);
-  //   }
-  //   else if (targetId === handle.image.id) {
-  //     addImageClipboard(rebuiltUrl);
-  //   }
-
-  // });
-
-  // });
 };
 
 
@@ -172,9 +144,9 @@ function addTextClipboard(newClip) {
       handle.link.classList = 'copied';
 
       /** Close popup to help Users get on with their lives; window is popup */
-      // setTimeout(() => {
-      //   window.close();
-      // }, 2000);
+      setTimeout(() => {
+        window.close();
+      }, 2000);
 
     })
     .catch(err => {
@@ -193,8 +165,9 @@ function addTextClipboard(newClip) {
  * @param {string} newClip 
  */
 const addImageClipboard = newClip => {
-  // try {
-  // const imgURL = newClip;
+  handle.image.classList = 'fetching';
+  handle.image.textContent = 'FETCH..';
+
   fetch(newClip).then(response => {
 
     return response.blob();
@@ -214,9 +187,9 @@ const addImageClipboard = newClip => {
           handle.image.classList = 'copied';
 
           /** Close popup to help Users get on with their lives */
-          // setTimeout(() => {
-          //   window.close();
-          // }, 2000);
+          setTimeout(() => {
+            window.close();
+          }, 2000);
 
         })
         .catch(err => {
@@ -228,16 +201,12 @@ const addImageClipboard = newClip => {
         });
     })
     .catch(err => {
-
+      handle.image.textContent = 'ERROR';
+      handle.image.classList = 'error';
       alert('Could not fetch');
       console.error('Image could not be fetched! ', err);
     });
 
-  // } catch (e) {
-  //   /* clipboard write failed */
-  //   console.error(e);
-  //   alert('Image could not be fetched! See Perry');
-  // }
 };
 
 
