@@ -103,8 +103,26 @@ const transformify = targetId => {
  */
 const breakApartUrl = url => {
   const split = url.split('/');
-  let [protocol] = [...split].slice(0, 1); //copy and strip array
-  const rest = [...split].slice(1, split.length - 1).join('/');
+  //copy and strip array - "http"
+  let [protocol] = [...split].slice(0, 1);
+  let rest = [];
+
+  if (split.length == 5) {
+    /** 
+     * untranformed url
+     *["", "images.salsify.com", "image", "upload", "s--qT0Rpe-g--"]  
+     */
+    rest = [...split].slice(1, split.length - 1).join('/');
+
+  } else {
+    /** 
+     * url has already been transformified - cut it 
+     * ["", "images.salsify.com", "image", "upload", "s--qT0Rpe-g--", "c_pad,w_1500,h_1500,dn_300,cs_srgb"]
+     */
+    rest = [...split].slice(1, split.length - 2).join('/');
+  }
+
+  //remove possible extension - "hc4jqgdybrvlb5hfmo5a"
   const last = [...split][split.length - 1].split('.')[0];
 
   if (protocol === 'http:') {
