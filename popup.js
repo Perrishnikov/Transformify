@@ -27,6 +27,7 @@ const handle = {
   out: document.querySelector('#output-select'),
   message: document.querySelector('#message'),
   debug: document.querySelector('#debug'),
+  twist: document.querySelector('#twist')
   // pg: document.querySelector('#pages-select'),
 };
 
@@ -273,7 +274,6 @@ function getPermission() {
 }
 
 
-
 /** Run on popup opening */
 initialize();
 
@@ -282,16 +282,55 @@ initialize();
  * Handles the disable on COPY button 
  */
 handle.out.addEventListener('change', (e) => {
-  console.log(e.target.value);
+  // console.log(e.target.value);
   const i = handle.image;
-  console.dir(i);
+  // console.dir(i);
   if (e.target.value === 'png') {
 
     handle.image.disabled = false;
-    console.log('set disable to false');
+    // console.log('set disable to false');
   }
   else {
-    console.log('set disable to true');
+    // console.log('set disable to true');
     handle.image.disabled = true;
   }
 });
+
+
+/** 
+ * handles toggling twist to link width and height
+ */
+handle.twist.addEventListener('click', (e) => {
+
+  if (e.target.closest('svg')) {
+
+    const dataTwist = e.target.closest('svg').dataset.twist;
+
+    if (dataTwist == 'true') {
+      e.target.closest('svg').setAttribute('data-twist', 'false');
+      // console.log('set disable to false');
+    }
+    else {
+
+      e.target.closest('svg').setAttribute('data-twist', 'true');
+      // console.log('set disable to true');
+    }
+  }
+
+});
+
+
+/** 
+ * handles changing the height when twist is locked 
+ */
+handle.w.addEventListener('change', (e) => {
+  const dataTwist = handle.twist.firstElementChild.dataset.twist;
+
+  if (dataTwist == 'true') {
+
+    handle.h.value = e.target.value;
+  }
+
+});
+
+
