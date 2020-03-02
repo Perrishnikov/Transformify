@@ -18,6 +18,6 @@
 3. The url will start with http://images.salsify.com/image/upload/.... and the extension becomes active.
 
 ## Notes:
-The modified link can be copied for all file types, and for png's the image can be copied.
-https://developer.chrome.com/webstore/get_started_simple
-https://developer.chrome.com/webstore/publish
+* The modified link can be copied for all file types, and for png's the image can be copied.
+* https://developer.chrome.com/webstore/get_started_simple
+* https://developer.chrome.com/webstore/publish
