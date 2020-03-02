@@ -8,7 +8,7 @@
 
 
 ## Instructions from PDP
-1. In Salsify (From PDP), navigate to the digital asset
+1. In Salsify (From PDP), navigate to the digital asset (click open icon on thumbnail)
 2. Click Actions -> Get Shareable Link
 3. Click Open...
 4. The url will start with http://images.salsify.com/image/upload/.... and the extension becomes active.
