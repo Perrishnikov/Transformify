@@ -1,6 +1,6 @@
 {
-  "name": "Image Transform",
-  "description": "Salsify",
+  "name": "Salsify Image Transform",
+  "description": "Grab any Salsify image URL and add a transformation string to it to change the image",
   "version": "1.0",
   "manifest_version": 2,
   "permissions": [
@@ -18,14 +18,14 @@
   "page_action": {
     "default_popup": "popup.html",
     "default_icon": {
-      "16": "images/auto_48.png",
-      "32": "images/auto_48.png",
+      "16": "images/auto_16.png",
+      "32": "images/auto_32.png",
       "48": "images/auto_48.png",
       "128": "images/auto_128.png"
     },
     "icons": {
-      "16": "images/auto_48.png",
-      "32": "images/auto_48.png",
+      "16": "images/auto_16.png",
+      "32": "images/auto_32.png",
       "48": "images/auto_48.png",
       "128": "images/auto_128.png"
     }
