@@ -1,8 +1,8 @@
 {
   "name": "Salsify Image Transform",
   "description": "Grab any Salsify image URL and add a transformation string to it to change the image",
-  "version": "1.0",
-  "manifest_version": 2,
+  "version": "2.0",
+  "manifest_version": 3,
   "permissions": [
     "declarativeContent",
     "tabs",
