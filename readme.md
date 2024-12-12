@@ -1,3 +1,5 @@
+# Transform Salsify images right in your browser!
+
 ## Installation
 1. For local install, download zip and unzip it.
 2. Open Chrome, navigate to "chrome://extensions"
