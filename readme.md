@@ -7,6 +7,7 @@
 4. Click Load Unpacked
 5. Navigate to directory of folder, click Open.
 6. Extension is now installed and ready to use.
+7. In the Toolbar, click the Extensions icon and pin "Salsify Image Transform"
 
 
 ## Instructions from PDP
